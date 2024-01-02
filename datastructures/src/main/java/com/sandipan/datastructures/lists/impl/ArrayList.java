@@ -9,12 +9,12 @@ public class ArrayList<E> implements List<E> {
     private int capacity;
     private E[] array;
 
-    ArrayList() {
+    public ArrayList() {
         this(DEFAULT_CAPACITY);
     }
 
     @SuppressWarnings("unchecked")
-    ArrayList(int capacity) {
+    public ArrayList(int capacity) {
         this.array = (E[]) new Object[size];
         this.size = 0;
         this.capacity = capacity;
