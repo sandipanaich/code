@@ -1,6 +1,9 @@
 package com.sandipan.datastructures.lists.impl;
 
 import com.sandipan.datastructures.lists.List;
+
+import static java.lang.String.format;
+
 public class ArrayList<E> implements List<E> {
 
     private static final int DEFAULT_CAPACITY = 10;
@@ -9,12 +12,12 @@ public class ArrayList<E> implements List<E> {
     private int capacity;
     private E[] array;
 
-    ArrayList() {
+    public ArrayList() {
         this(DEFAULT_CAPACITY);
     }
 
     @SuppressWarnings("unchecked")
-    ArrayList(int capacity) {
+    public ArrayList(int capacity) {
         this.array = (E[]) new Object[size];
         this.size = 0;
         this.capacity = capacity;
@@ -23,36 +26,60 @@ public class ArrayList<E> implements List<E> {
     @Override
     public void add(E element) {
 
+        int lastIndex = size;
+        add(lastIndex, element);
     }
 
     @Override
     public void add(int index, E element) {
-
+        int size = this.size;
+        if(size == capacity)
+            grow();
+        int right = size;
+        int left = index;
+        while(left < right) {
+            array[left] = array[left + 1];
+            left++;
+        }
+        array[index] = element;
     }
 
     @Override
     public E get(int index) {
-        return null;
+        if(index < 0 || index >= size)
+            throw new ArrayIndexOutOfBoundsException(format("Cannot access the element in the position %d.", index));
+        return this.array[index];
     }
 
     @Override
     public E remove(int index) {
-        return null;
+        E element = array[index];
+        while(index < size) {
+            array[index] = array[index + 1];
+            index++;
+        }
+        size--;
+        return element;
     }
 
     @Override
     public int size() {
-        return 0;
+        return this.size;
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return this.size == 0;
     }
 
     @Override
     public boolean contains(E element) {
-        return false;
+        int index = 0;
+        for( ; index < size; index++) {
+            if(array[index].equals(element))
+                break;
+        }
+        return index != size;
     }
 
     @Override
@@ -66,8 +93,14 @@ public class ArrayList<E> implements List<E> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void clear() {
-
+        int size = this.size;
+        if(size == 0)
+            this.array = (E[]) new Object[capacity];
+        else
+            this.array = (E[]) new Object[size];
+        Runtime.getRuntime().gc();
     }
 
     @Override
