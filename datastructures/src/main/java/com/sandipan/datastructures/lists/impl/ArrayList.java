@@ -1,8 +1,14 @@
+/**
+ * ArrayList.java
+ * Creation Date: 10/07/2018, 9:00:00 PM
+ */
 package com.sandipan.datastructures.lists.impl;
 
 import com.sandipan.datastructures.lists.List;
 
 import static java.lang.String.format;
+
+import java.util.Arrays;
 
 public class ArrayList<E> implements List<E> {
 
@@ -32,6 +38,10 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public void add(int index, E element) {
+
+        if(index < 0 || index > size)
+            throw new ArrayIndexOutOfBoundsException(format("Cannot add element in the position %d.", index));
+
         int size = this.size;
         if(size == capacity)
             grow();
@@ -42,6 +52,17 @@ public class ArrayList<E> implements List<E> {
             left++;
         }
         array[index] = element;
+    }
+
+    @Override
+    public E set(int index, E element) {
+
+        if(index < 0 || index >= size)
+            throw new ArrayIndexOutOfBoundsException(format("Cannot set element in the position %d.", index));
+
+        E oldElement = array[index];
+        array[index] = element;
+        return oldElement;
     }
 
     @Override
@@ -84,12 +105,20 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public int indexOf(E element) {
-        return 0;
+        for(int i = 0; i < size; i++) {
+            if(array[i].equals(element))
+                return i;
+        }
+        return -1;
     }
 
     @Override
     public int lastIndexOf(E element) {
-        return 0;
+        for(int i = size - 1; i >= 0; i--) {
+            if(array[i].equals(element))
+                return i;
+        }
+        return -1;
     }
 
     @Override
@@ -104,18 +133,15 @@ public class ArrayList<E> implements List<E> {
     }
 
     @Override
-    public E set(int index, E element) {
-        return null;
-    }
-
-    @Override
     public E[] toArray() {
-        return null;
+        E[] newArray = createArray(size);
+        System.arraycopy(array, 0, newArray, 0, size);
+        return newArray;
     }
 
     @Override
     public String toString() {
-        return null;
+        return Arrays.toString(array);
     }
 
     private void checkAndGrow() {
@@ -131,6 +157,9 @@ public class ArrayList<E> implements List<E> {
     private void grow() {
         int currentSize = this.size;
         int newCapacity = currentSize + DEFAULT_CAPACITY;
+        if(newCapacity > MAX_CAPACITY)
+            throw new OutOfMemoryError(format("Cannot grow the array beyond the maximum capacity %d.", MAX_CAPACITY));
+        
         E[] newArray = createArray(newCapacity);
         this.capacity = newCapacity;
         System.arraycopy(array, 0, newArray, 0, currentSize);
