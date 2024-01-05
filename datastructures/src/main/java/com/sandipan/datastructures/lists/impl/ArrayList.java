@@ -1,3 +1,7 @@
+/**
+ * ArrayList.java
+ * Creation Date: 10/07/2018, 9:00:00 PM
+ */
 package com.sandipan.datastructures.lists.impl;
 
 import com.sandipan.datastructures.lists.List;
@@ -54,7 +58,7 @@ public class ArrayList<E> implements List<E> {
     public E set(int index, E element) {
 
         if(index < 0 || index >= size)
-            throw new ArrayIndexOutOfBoundsException(format("Cannot set element in the position %d.", index)
+            throw new ArrayIndexOutOfBoundsException(format("Cannot set element in the position %d.", index));
 
         E oldElement = array[index];
         array[index] = element;
